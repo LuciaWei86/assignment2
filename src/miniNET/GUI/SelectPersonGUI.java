@@ -54,14 +54,14 @@ public class SelectPersonGUI {
 		Label label = new Label("Please choose one: ");
 		Button btDisplay = new Button("Display profile");
 		Button btRelation = new Button("Display relations");
-		Button btFindOutPC = new Button("Find out the parent or child of the person");
+		Button btFindRelation = new Button("Find out the parent or child of the person");
 		Button btDelete = new Button("Delete this person");
 		Button btBack = new Button("Back");
 
 		pane.add(label, 0, 0);
 		pane.add(btDisplay, 0, 1);
 		pane.add(btRelation, 0, 2);
-		pane.add(btFindOutPC, 0, 3);
+		pane.add(btFindRelation, 0, 3);
 		pane.add(btDelete, 0, 4);
 		pane.add(btBack, 0, 5);
 
@@ -74,7 +74,7 @@ public class SelectPersonGUI {
 			displayRelationAction(person);
 		});
 
-		btFindOutPC.setOnAction(e -> {
+		btFindRelation.setOnAction(e -> {
 
 		});
 

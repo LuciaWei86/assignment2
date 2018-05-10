@@ -15,8 +15,8 @@ public class Menu {
 	static public Driver driver;
 
 	public Menu(Stage window, Driver driver) {
-		this.window = window;
-		this.driver = driver;
+		Menu.window = window;
+		Menu.driver = driver;
 	}
 
 	static public GridPane setUpPane() {
@@ -52,7 +52,7 @@ public class Menu {
         selectPersonBt.setOnAction(event -> {
           window.setScene(new SelectPersonGUI().individualMainScene());
         });
-//
+
 //        deletePersonBt.setOnAction(e -> {
 //        });
 //        
