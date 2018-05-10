@@ -7,7 +7,6 @@ package miniNET.Models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import miniNET.Helper;
 import miniNET.Constants.RelationshipConstant;
 import miniNET.Models.Connections.FriendConnection;
 import miniNET.Models.Connections.ParentConnection;
@@ -20,7 +19,7 @@ public class ChildProfile extends PersonProfile {
 	}
 
 	public ChildProfile(String name, String image, String status, String gender, int age) {
-		this.setConnections(new HashMap<String,ArrayList<PersonProfile>>());
+		this.setConnections(new HashMap<String, ArrayList<PersonProfile>>());
 		this.setName(name);
 		this.setImage(image);
 		this.setStatus(status);
@@ -28,13 +27,14 @@ public class ChildProfile extends PersonProfile {
 		this.setAge(age);
 		this.parentA = new AdultProfile();
 		this.parentB = new AdultProfile();
-		
+
 	}
 
 	private void addParent(AdultProfile parent1, AdultProfile parent2) throws Exception {
-		this.setConnectionManipulator(new ParentConnection(parent1,parent2,this));
+		this.setConnectionManipulator(new ParentConnection(parent1, parent2, this));
 		this.getConnectionManipulator().add();
 	}
+
 	public AdultProfile getParentA() {
 		return parentA;
 	}
@@ -59,25 +59,24 @@ public class ChildProfile extends PersonProfile {
 			this.connectionManipulator.add();
 			break;
 		case RelationshipConstant.PARENT:
-			
-			if(parentA==null) {
-				parentA= (AdultProfile) relatedPerson;
+
+			if (parentA == null) {
+				parentA = (AdultProfile) relatedPerson;
+			} else if (parentB == null) {
+				parentB = (AdultProfile) relatedPerson;
 			}
-			else if(parentB==null)  {
-				parentB= (AdultProfile) relatedPerson;
-			}
-			if(parentA!=null&&parentB!=null)
-				addParent(parentA,parentB);
+			if (parentA != null && parentB != null)
+				addParent(parentA, parentB);
 			break;
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
 	public void removeRelationship(String relationType, PersonProfile relatedPerson) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

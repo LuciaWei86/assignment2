@@ -11,12 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
-
 import miniNET.Models.*;
-import miniNET.Constants.RelationshipConstant;
-import miniNET.Helper;
 
 public class Driver {
 	private HashMap<String, PersonProfile> personStorage = new HashMap<String, PersonProfile>();;
@@ -101,8 +96,6 @@ public class Driver {
 			}
 		}
 	}
-	
-	
 	public PersonProfile addPerson(String name, String image, String status, String gender, int personAge) {
 		PersonProfile person;
 		for (String pn : personName) {
@@ -122,85 +115,10 @@ public class Driver {
 		}
 	}
 
-	// private void addRelationData() {
-	//
-	// for (String[] st : relationData) {
-	//
-	// for (String name : connection.keySet()) {
-	//
-	// // for parent relation
-	// if (name.equals(st[0].trim())) {
-	//
-	// if (st[2].trim().equals("parent") && (connection.get(st[0].trim())
-	// instanceof Adult)) {
-	// String temp = st[0];
-	// st[0] = st[1].trim();
-	// st[1] = temp.trim();
-	// name = st[0];
-	//
-	// }
-	// // System.out.println(st[0]+" "+st[1]+" "+st[2]);
-	// // System.out.println(name+ " "+connection.get(name)
-	// // instanceof
-	// // Child);
-	// try {
-	// connection.get(name).addRelationship(st[2].trim(),
-	// connection.get(st[1].trim()));
-	// } catch (NotToBeFriendsException e) {
-	// // TODO Auto-generated catch block
-	// e.notToBeFriendsException();
-	// } catch (TooYoungException e) {
-	// e.tooYoungException();
-	// } catch (Exception e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-	// }
-	// }
-	//
-	// // warning message for the child doesn't have the parents relation
-	// for (PersonProfile pr : connection.values()) {
-	// if (!(pr instanceof Adult))
-	// if (pr.getRelationship().get("parent").size() < 2) {
-	// System.out.println(pr.getName() + " doesn't have parents\n");
-	// throw new NoParentsException();
-	// }
-	// }
-	// }
-
-	//
-	// public void deletePersonProfile(PersonProfile currentPersonProfile) {
-	//
-	// for (String relationType :
-	// currentPersonProfile.getRelationship().keySet()) {
-	// System.out.println(relationType);
-	// for (PersonProfile relatedPersonProfile :
-	// currentPersonProfile.getRelationship().get(relationType)) {
-	// currentPersonProfile.removeRelationship(relationType,
-	// relatedPersonProfile);
-	// if (relationType == "child") {
-	// connection.remove(relatedPersonProfile.getName());
-	// }
-	// }
-	// }
-	// connection.remove(currentPersonProfile.getName());
-	// for (String sr : connection.keySet()) {
-	// connection.get(sr).displayProfile();
-	// }
-	// }
-	//
-	// public HashMap<String, PersonProfile> getconnection() {
-	// return connection;
-	// }
-	//
-	// public PersonProfile getconnectionObj(String key) {
-	//
-	// return connection.get(key);
-	// }
-	// NetworkData networkData = new NetworkData();
-	// Scanner sc = new Scanner(System.in);
-	//
-
-
+	public HashMap<String, PersonProfile> loadPersonStorage(){
+		return personStorage;
+	}
+	public PersonProfile findPersonByName(String name){
+		return personStorage.get(name);
+	}
 }

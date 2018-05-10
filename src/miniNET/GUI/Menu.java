@@ -49,9 +49,9 @@ public class Menu {
 			window.setScene(new AddPersonGUI().addPersonScene());
 		});
 		
-//        selectPersonBt.setOnAction(event -> {
-//          window.setScene(new SelectPersonGUI().selectPersonScene());
-//        });
+        selectPersonBt.setOnAction(event -> {
+          window.setScene(new SelectPersonGUI().selectPersonScene());
+        });
 //
 //        deletePersonBt.setOnAction(e -> {
 //        });
@@ -63,7 +63,7 @@ public class Menu {
 			window.close();
 		});
 
-		Scene scene = new Scene(pane, 800, 500);
+		Scene scene = new Scene(pane, 400, 400);
 		return scene;
 	}
 
