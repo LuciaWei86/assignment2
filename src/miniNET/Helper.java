@@ -3,10 +3,7 @@
  *  
  *  */
 package miniNET;
-
-import miniNET.Constants.RelationshipConstant;
 import miniNET.Models.ChildProfile;
-import miniNET.Models.PersonProfile;
 
 public class Helper {
 

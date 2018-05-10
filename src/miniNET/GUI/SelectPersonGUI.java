@@ -1,30 +1,24 @@
 package miniNET.GUI;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import miniNET.Helper;
 import miniNET.Models.PersonProfile;
 
 public class SelectPersonGUI {
-	public Scene selectPersonScene() {
+	public Scene individualMainScene() {
 		GridPane pane = Menu.setUpPane();
 		Label label = new Label("Please select one person");
 		Button select = new Button("Select");
@@ -55,7 +49,7 @@ public class SelectPersonGUI {
 		return scene;
 	}
 
-	private Scene viewPersonScene(PersonProfile selectedPerson) {
+	private Scene viewPersonScene(PersonProfile person) {
 		GridPane pane = Menu.setUpPane();
 		Label label = new Label("Please choose one: ");
 		Button btDisplay = new Button("Display profile");
@@ -72,12 +66,12 @@ public class SelectPersonGUI {
 		pane.add(btBack, 0, 5);
 
 		btDisplay.setOnAction(e -> {
-			displayProfileAction(selectedPerson);
+			displayProfileAction(person);
 
 		});
 
 		btRelation.setOnAction(e -> {
-
+			displayRelationAction(person);
 		});
 
 		btFindOutPC.setOnAction(e -> {
@@ -89,66 +83,74 @@ public class SelectPersonGUI {
 		});
 
 		btBack.setOnAction(e -> {
-			Menu.window.setScene(selectPersonScene());
+			Menu.window.setScene(individualMainScene());
 		});
 
 		Scene scene = new Scene(pane, 700, 500);
 		return scene;
 	}
 
-	private void displayProfileAction(PersonProfile selectedPerson) {
-		String name =selectedPerson.getName();
-	    int age = selectedPerson.getAge();
-	    String status = selectedPerson.getStatus();
-	    String gender = selectedPerson.getGender();
-	    String photo = selectedPerson.getImage();
+	private void displayRelationAction(PersonProfile person) {
+		GridPane pane = Menu.setUpPane();
+		if (!person.getConnections().keySet().isEmpty()) {
+			int i = 0;
+			for (String type : person.getConnections().keySet()) {
+				ArrayList<PersonProfile> relationship = person.getConnections().get(type);
+				for (PersonProfile r : relationship) {
+					pane.add(new Text(type + " : " + r.getName()), 0, i);
+					i++;
+				}
+			}
+		} else
+		{
+			Text text1 = new Text("No relationship found of" + " " + person.getName());
+			text1.setFill(Color.RED);
+			pane.add(text1, 0, 0);
+		}
 
-	    Button btBack = new Button("Back");
+		Button btBack = new Button("Back");
+		pane.add(btBack, 2, 12);
+		btBack.setOnAction(e -> {
+			Menu.window.setScene(viewPersonScene(person));
+		});
+		Scene scene = new Scene(pane, 700, 500);
+		Menu.window.setScene(scene);
 
-	    GridPane pane = new GridPane();
-	    pane.setAlignment(Pos.CENTER);
-	    pane.setPadding(new Insets(5, 5, 5, 5));
-	    pane.setHgap(5.5);
-	    pane.setVgap(5.5);
+	}
 
-	    pane.add((new Label("Name: ")), 1, 3);
-	    pane.add(new Label("Age: "), 1, 4);
-	    pane.add(new Label("Status: "), 1, 5);
-	    pane.add(new Label("Gender: "), 1, 6);
-	    pane.add(new Label("State: "), 1, 7);
-	    pane.add(btBack, 7, 10);
-	    // btBack action, put it in the right position after
-	    btBack.setOnAction(e -> {
-	    	Menu.window.setScene(viewPersonScene(selectedPerson));
-	    });
+	private void displayProfileAction(PersonProfile person) {
+		String name = person.getName();
+		int age = person.getAge();
+		String status = Helper.isEmptyString(person.getStatus()) ? "N/A" : person.getStatus();
+		String gender = person.getGender();
+		String image = Helper.isEmptyString(person.getImage()) ? "No Image" : person.getImage();
 
-	    // pane.add(new Label(photo), 2, 1);
+		Button btBack = new Button("Back");
+		GridPane pane = new GridPane();
+		pane.setAlignment(Pos.CENTER);
+		pane.setPadding(new Insets(5, 5, 5, 5));
+		pane.setHgap(5.5);
+		pane.setVgap(5.5);
 
-//	    ImageView imageView = new ImageView();
-//
-//	    if( photo.equals("")) {
-//
-//	        Image defaultImage = new Image(new FileInputStream("image/default.png"));
-//	        imageView.setImage(defaultImage);
-//	    }else {
-//
-//	    		Image image = new Image(new FileInputStream("image/"+ photo));
-//	        imageView.setImage(image);
-//
-//	    }
-//	    imageView.setFitHeight(100);
-//	    imageView.setFitWidth(100);
-//	    pane.add(imageView, 3, 0);
+		pane.add((new Label("Name: ")), 1, 3);
+		pane.add((new Label("Image: ")), 1, 4);
+		pane.add(new Label("Age: "), 1, 5);
+		pane.add(new Label("Status: "), 1, 6);
+		pane.add(new Label("Gender: "), 1, 7);
+		pane.add(btBack, 7, 10);
+		btBack.setOnAction(e -> {
+			Menu.window.setScene(viewPersonScene(person));
+		});
+		pane.add((new Label(name)), 4, 3);
+		pane.add((new Label(image)), 4, 4);
+		pane.add(new Label(Integer.toString(age)), 4, 5);
+		pane.add(new Label(status), 4, 6);
+		pane.add(new Label(gender), 4, 7);
 
-	    pane.add((new Label(name)), 4, 3);
-	    pane.add(new Label(Integer.toString(age)), 4, 4);
-	    pane.add(new Label(status), 4, 5);
-	    pane.add(new Label(gender), 4, 6);
+		Scene scene = new Scene(pane, 500, 500);
+		Menu.window.setScene(scene);
+		Menu.window.show();
 
-	    Scene scene = new Scene(pane, 700, 500);
-	    Menu.window.setScene(scene);
-	    Menu.window.show();
-		
 	}
 
 }

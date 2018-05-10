@@ -50,7 +50,7 @@ public class Menu {
 		});
 		
         selectPersonBt.setOnAction(event -> {
-          window.setScene(new SelectPersonGUI().selectPersonScene());
+          window.setScene(new SelectPersonGUI().individualMainScene());
         });
 //
 //        deletePersonBt.setOnAction(e -> {

@@ -76,8 +76,6 @@ public abstract class PersonProfile {
 		this.connections = connections;
 	}
 
-	
-
 	// add connection on person profile
 	public void addConnections(String relationType, ArrayList<PersonProfile> connection) {
 		if (this.connections == null) {
@@ -88,18 +86,20 @@ public abstract class PersonProfile {
 
 	// print out person profile
 	public void displayPersonProfile(PersonProfile person) {
-		
-		String image = Helper.validateString(person.getImage()) ? person.getImage() : "N/A";
-		String status = Helper.validateString(person.getStatus()) ? person.getStatus() : "N/A";
 		System.out.println("Name: " + person.getName());
-		if(!Helper.isEmptyString(image)){
+		if (!Helper.isEmptyString(image)) {
 			System.out.println("Image:" + image);
-		}else{
-			System.out.println("Image: no image" );
+		} else {
+			System.out.println("Image: No Image");
 		}
 		System.out.println("Gender: " + person.getGender());
 		System.out.println("Age: " + person.getAge());
 		System.out.println("Status: " + status);
+		if (!Helper.isEmptyString(status)) {
+			System.out.println("Status:" + status);
+		} else {
+			System.out.println("N/A");
+		}
 		for (String key : connections.keySet()) {
 			System.out.print(key + ": ");
 			for (int i = 0; i < connections.get(key).size(); i++) {
@@ -108,20 +108,22 @@ public abstract class PersonProfile {
 			System.out.println();
 		}
 
-
 		System.out.println();
 
 	}
 
 	public abstract void addRelationship(String relationType, PersonProfile relatedPerson) throws Exception;
+
 	public abstract void removeRelationship(String relationType, PersonProfile relatedPerson);
 
-	public void setConnectionManipulator(ConnectionManipulator connectionManipulator){
+	public void setConnectionManipulator(ConnectionManipulator connectionManipulator) {
 		this.connectionManipulator = connectionManipulator;
 	}
+
 	public ConnectionManipulator getConnectionManipulator() {
 		return connectionManipulator;
 	}
+
 	public ConnectionManipulator setConnectionManipulator() {
 		return connectionManipulator;
 	}
