@@ -5,7 +5,12 @@
 
 package miniNET;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,225 +19,188 @@ import miniNET.Constants.RelationshipConstant;
 import miniNET.Helper;
 
 public class Driver {
-	NetworkData networkData = new NetworkData();
-	Scanner sc = new Scanner(System.in);
+	private HashMap<String, PersonProfile> personStorage = new HashMap<String, PersonProfile>();;
+	ArrayList<String[]> relationData = new ArrayList<String[]>();
+	ArrayList<String> personName = new ArrayList<String>();
 
-	// 0. list everyone
-	public void listEveryone() {
-		List<PersonProfile> network = networkData.allData();
-		for (PersonProfile p : network) {
-			System.out.println("Name: " + p.getName());
-		}
-	}
-
-	// 1. add a person into the network
-	public void addPersonToNetwork() {
-		List<PersonProfile> network = networkData.allData();
+	public void initialData() throws IOException {
+		String[] pTextData = null;
+		String[] rTextData = null;
+		PersonProfile person = null;
+		// read relations.txt from data seed
 		try {
-			System.out.println("Please enter person's name: ");
-			String name = sc.nextLine();
-			System.out.println("Please enter person's gender: F/M");
-			String gender = sc.nextLine();
-			System.out.println("Add image on profile? Y/N");
-			boolean imageFlag = Helper.isYes(sc.nextLine());
-			String image = imageFlag ? sc.nextLine() : "";
-			System.out.println("Add status on profile? Y/N");
-			boolean statusFlag = Helper.isYes(sc.nextLine());
-			String status = statusFlag ? sc.nextLine() : "";
-			System.out.println("Please enter person's age: ");
-			int age = sc.nextInt();
-			if (age <= 16) {
-				System.out.println("Please enter person's parent name: ");
-				String parentAName = sc.nextLine();
-				AdultProfile parentA = (AdultProfile) selectAPersonByName(parentAName);
-				System.out.println("Please enter person's another parent name: ");
-				String parentBName = sc.nextLine();
-				AdultProfile parentB = (AdultProfile) selectAPersonByName(parentBName);
-				PersonProfile personProfile = new ChildProfile(age, name, image, status, gender, parentA, parentB);
-				network.add(personProfile);
-			} else {
-				PersonProfile personProfile = new AdultProfile(age, name, image, status, gender);
-				network.add(personProfile);
+			BufferedReader getRelationFromFile = new BufferedReader(
+					new FileReader("src/miniNET/DataSeed/relations.txt"));
+			String currentLine;
+			while ((currentLine = getRelationFromFile.readLine()) != null) {
+				rTextData = currentLine.split(",");
+				relationData.add(rTextData);
 			}
-			System.out.println("Added " + name + " on network.");
 
+			getRelationFromFile.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			BufferedReader getPeopleFromFile = new BufferedReader(new FileReader("src/miniNET/DataSeed/people.txt"));
+			String currentLine;
+			while ((currentLine = getPeopleFromFile.readLine()) != null) {
+				pTextData = currentLine.split(",");
+				for (int i = 0; i < pTextData.length; i++) {
+					pTextData[i] = pTextData[i].replace("\"", "");
+				}
+				int age = Integer.parseInt(pTextData[4].trim());
+				if (age < 3) {
+					person = new YoungChildProfile(pTextData[0].trim(), pTextData[1].trim(), pTextData[2].trim(),
+							pTextData[3].trim(), age);
+				} else if (age <= 16) {
+					person = new ChildProfile(pTextData[0].trim(), pTextData[1].trim(), pTextData[2].trim(),
+							pTextData[3].trim(), age);
+
+				} else {
+					person = new AdultProfile(pTextData[0].trim(), pTextData[1].trim(), pTextData[2].trim(),
+							pTextData[3].trim(), age);
+				}
+				// store current person and name
+				personName.add(pTextData[0].trim());
+				personStorage.put(pTextData[0].trim(), person);
+			}
+			getPeopleFromFile.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			addRelationToPerson();
 		} catch (Exception e) {
-			System.out.println("Failed Add a Person.");
+			e.printStackTrace();
 		}
+		 for (String name: personStorage.keySet()) {
+			 personStorage.get(name).displayPersonProfile(personStorage.get(name));
+		 }
 
 	}
-
-	// 2. select a person by name
-	public PersonProfile selectAPersonByName(String name) {
-		List<PersonProfile> network = networkData.allData();
-		for (PersonProfile p : network) {
-			if (p.getName().equalsIgnoreCase(name)) {
-				return p;
-			}
-		}
-		return null;
-	}
-
-	// 3. display the profile of the selected person
-	public void displayPersonProfile(String name) {
-		PersonProfile personProfile = selectAPersonByName(name);
-		if (personProfile == null) {
-			System.out.println("This person does not exist on our network");
-			return;
-		}
-		if (Helper.isChild(personProfile.getAge())) {
-			personProfile.displayPersonProfile(personProfile);
-		} else {
-			personProfile.displayPersonProfile(personProfile);
-		}
-	}
-
-	// 4. update the profile of selected person
-	public void updateSelectedPerson(String name) {
-		List<PersonProfile> network = networkData.allData();
-		boolean flag = false;
-		boolean valid = false;
-		for (PersonProfile p : network) {
-			if (p.getName().equalsIgnoreCase(name)) {
-				flag = true;
-				int selectedItem;
-				String updated;
-				do {
-					System.out.println("Which info do you want to update? ");
-					System.out.println("1. Age ");
-					System.out.println("2. Status");
-					System.out.println("3. Imgae");
-					System.out.println("4. Exit");
-					selectedItem = sc.nextInt();
-					valid = true;
-					switch (selectedItem) {
-					case 1:
-						System.out.println("Input updated age: ");
-						int newAge = sc.nextInt();
-						p.setAge(newAge);
-						break;
-					case 2:
-						System.out.println("Input updated status: ");
-						updated = sc.nextLine();
-						p.setStatus(updated);
-						break;
-					case 3:
-						System.out.println("Input updated iamge: ");
-						updated = sc.nextLine();
-						p.setImage(updated);
-						break;
-					case 4:
-						return;
-					default:
-						valid = false;
-						System.out.println("Error : Choice " + selectedItem + " Does not exist.");
-						System.out.println("Please select one that exists.");
+	private void addRelationToPerson(){
+		for(String[] r: relationData){
+			for(String name: personStorage.keySet()){
+				if(name.equalsIgnoreCase(r[0].trim())){
+					if (r[2].trim().equals("parent") && (personStorage.get(r[0].trim()) instanceof AdultProfile)) {
+						String temp = r[0];
+						r[0] = r[1].trim();
+						r[1] = temp.trim();
+						name = r[0];
 					}
-				} while (selectedItem != 4 || !valid);
-			}
-		}
-		if (!flag) {
-			System.out.println("Sorry, this person does not exits");
-		} else {
-			System.out.println("Updated");
-		}
-	}
+					try {
+						personStorage.get(name).addRelationship(r[2].trim(), personStorage.get(r[1].trim()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
-	// 5. delete the selected person
-	public void deleteSelectedPerson(String name) {
-		PersonProfile personProfile = selectAPersonByName(name);
-		if (personProfile == null) {
-			System.out.println("This person does not exist on our network");
-			return;
-		}
-		boolean flag = false;
-		List<PersonProfile> network = networkData.allData();
-		for (PersonProfile p : network) {
-			if (p.getName().equals(personProfile.getName())) {
-				network.remove(p);
-				flag = true;
-				return;
-			}
-		}
-		if (!flag) {
-			System.out.println("Sorry, this person does not exits");
-		} else {
-			System.out.println("Deleted");
-		}
-	}
-
-	// 6. connect two person in a meaningful way
-	public void connectTwoPerson(String person1Name, String person2Name, String relationShip) {
-		PersonProfile person1 = selectAPersonByName(person1Name);
-		PersonProfile person2 = selectAPersonByName(person2Name);
-		if (person1 == null || person2 == null) {
-			System.out.println("This person does not exist on our network");
-			return;
-		}
-		if (Helper.isChild(person1.getAge())) {
-			ChildProfile child1 = (ChildProfile) person1;
-			ChildProfile child2 = (ChildProfile) person2;
-			child1.connectToPeople(child1, child2, relationShip);
-		} else {
-			AdultProfile adult1 = (AdultProfile) person1;
-			AdultProfile adult2 = (AdultProfile) person2;
-			adult1.connectToPeople(adult1, adult2, relationShip);
-		}
-	}
-
-	// 7. Find out whether a personProfile is a direct friend of another
-	public boolean checkDirectFriendship(String person1Name, String person2Name) {
-		PersonProfile person1 = selectAPersonByName(person1Name);
-		if (person1 == null) {
-			System.out.println(person1Name + " does not exist on our network");
-			return false;
-		}
-		if (person1.getConnections() == null || person1.getConnections().isEmpty()) {
-			System.out.println(person1Name + " has no connection");
-		}
-		for (Connection connection : person1.getConnections()) {
-			if (connection.connectionType == RelationshipConstant.FRIENDSHIP
-					&& connection.personProfile.getName().equals(person2Name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	// 8. find out the name of a person's children
-	public List<String> findoutPersonsChildrenNames(String personName) {
-		PersonProfile personProfile = selectAPersonByName(personName);
-		if (personProfile == null) {
-			System.out.println("This person does not exist on our network");
-			return null;
-		}
-		List<String> nameList = new ArrayList<String>();
-		if (personProfile.getConnections() != null) {
-			for (Connection connection : personProfile.getConnections()) {
-				if (connection.connectionType == RelationshipConstant.DEPENDENT) {
-					nameList.add(connection.personProfile.getName());
 				}
 			}
 		}
-		return nameList;
 	}
-
-	// 9. find out the names of a person's parents
-	public List<String> findoutPersonsParentsName(String personName) {
-		PersonProfile personProfile = selectAPersonByName(personName);
-		if (personProfile == null) {
-			System.out.println("This person does not exist on our network");
-			return null;
-		}
-		List<String> nameList = new ArrayList<String>();
-		if (personProfile.getConnections() != null) {
-			for (Connection connection : personProfile.getConnections()) {
-				if (connection.connectionType == RelationshipConstant.PARENT) {
-					nameList.add(connection.personProfile.getName());
-				}
+	
+	
+	public PersonProfile addPerson(String name, String image, String status, String gender, int personAge) {
+		PersonProfile person;
+		for (String pn : personName) {
+			if (name.equalsIgnoreCase(pn)){
+				return null;
 			}
 		}
-		return nameList;
+		if (personAge < 3) {
+			person = new YoungChildProfile(name, image, status, gender, personAge);
+			return person;
+		} else if (personAge <= 16) {
+			person = new ChildProfile(name, image, status, gender, personAge);
+			return person;
+		} else {
+			person = new AdultProfile(name, image, status, gender, personAge);
+			return person;
+		}
 	}
+
+	// private void addRelationData() {
+	//
+	// for (String[] st : relationData) {
+	//
+	// for (String name : connection.keySet()) {
+	//
+	// // for parent relation
+	// if (name.equals(st[0].trim())) {
+	//
+	// if (st[2].trim().equals("parent") && (connection.get(st[0].trim())
+	// instanceof Adult)) {
+	// String temp = st[0];
+	// st[0] = st[1].trim();
+	// st[1] = temp.trim();
+	// name = st[0];
+	//
+	// }
+	// // System.out.println(st[0]+" "+st[1]+" "+st[2]);
+	// // System.out.println(name+ " "+connection.get(name)
+	// // instanceof
+	// // Child);
+	// try {
+	// connection.get(name).addRelationship(st[2].trim(),
+	// connection.get(st[1].trim()));
+	// } catch (NotToBeFriendsException e) {
+	// // TODO Auto-generated catch block
+	// e.notToBeFriendsException();
+	// } catch (TooYoungException e) {
+	// e.tooYoungException();
+	// } catch (Exception e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
+	// }
+	// }
+	//
+	// // warning message for the child doesn't have the parents relation
+	// for (PersonProfile pr : connection.values()) {
+	// if (!(pr instanceof Adult))
+	// if (pr.getRelationship().get("parent").size() < 2) {
+	// System.out.println(pr.getName() + " doesn't have parents\n");
+	// throw new NoParentsException();
+	// }
+	// }
+	// }
+
+	//
+	// public void deletePersonProfile(PersonProfile currentPersonProfile) {
+	//
+	// for (String relationType :
+	// currentPersonProfile.getRelationship().keySet()) {
+	// System.out.println(relationType);
+	// for (PersonProfile relatedPersonProfile :
+	// currentPersonProfile.getRelationship().get(relationType)) {
+	// currentPersonProfile.removeRelationship(relationType,
+	// relatedPersonProfile);
+	// if (relationType == "child") {
+	// connection.remove(relatedPersonProfile.getName());
+	// }
+	// }
+	// }
+	// connection.remove(currentPersonProfile.getName());
+	// for (String sr : connection.keySet()) {
+	// connection.get(sr).displayProfile();
+	// }
+	// }
+	//
+	// public HashMap<String, PersonProfile> getconnection() {
+	// return connection;
+	// }
+	//
+	// public PersonProfile getconnectionObj(String key) {
+	//
+	// return connection.get(key);
+	// }
+	// NetworkData networkData = new NetworkData();
+	// Scanner sc = new Scanner(System.in);
+	//
+
 
 }

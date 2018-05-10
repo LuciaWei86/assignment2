@@ -1,68 +1,31 @@
 package miniNET.Models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import miniNET.Helper;
+import miniNET.Models.Connections.ConnectionManipulator;
 
 public abstract class PersonProfile {
-	
-	//Author：Fandi Wei, Student Number: s3667669
-	
 	private String name;
 	private String image;
 	private String status;
-	private int age;
 	private String gender;
-	private ArrayList<Connection> connections;
+	private int age;
+	private HashMap<String, ArrayList<PersonProfile>> connections;
+	ConnectionManipulator connectionManipulator;
 
 	public PersonProfile() {
-		// TODO Auto-generated constructor stub
 	}
-	public PersonProfile(int age, String name, String image, String status, String gender,
-			ArrayList<Connection> connections) {
+
+	public PersonProfile(String name, String image, String status, String gender, int age) {
 		this.name = name;
 		this.image = image;
 		this.status = status;
-		this.age = age;
 		this.gender = gender;
-		this.connections = connections;
-	}
-
-	public PersonProfile(int age, String name, String gender, ArrayList<Connection> connections) {
-		this.name = name;
 		this.age = age;
-		this.gender = gender;
-		this.connections = connections;
 	}
-
-	public PersonProfile(int age, String name, String image, String status, String gender) {
-		this.name = name;
-		this.image = image;
-		this.status = status;
-		this.age = age;
-		this.gender = gender;
-	}
-
-	public PersonProfile(int age, String name, String gender) {
-		this.name = name;
-		this.age = age;
-		this.gender = gender;
-	}
-
-	// add connection on person profile
-	public void addConnections(Connection connection) {
-		if (this.connections == null) {
-			this.connections = new ArrayList<Connection>();
-		}
-		this.connections.add(connection);
-	}
-
-	// print out person profile
-	public abstract void displayPersonProfile(PersonProfile person);
-
-	// connect with others
-	abstract void connectToPeople(PersonProfile person1, PersonProfile person2, String relationShip);
 
 	// getter and setter
 	public String getName() {
@@ -105,12 +68,61 @@ public abstract class PersonProfile {
 		this.gender = gender;
 	}
 
-	public ArrayList<Connection> getConnections() {
+	public HashMap<String, ArrayList<PersonProfile>> getConnections() {
 		return connections;
 	}
 
-	public void setConnections(ArrayList<Connection> connections) {
+	public void setConnections(HashMap<String, ArrayList<PersonProfile>> connections) {
 		this.connections = connections;
 	}
 
+	
+
+	// add connection on person profile
+	public void addConnections(String relationType, ArrayList<PersonProfile> connection) {
+		if (this.connections == null) {
+			this.connections = new HashMap<String, ArrayList<PersonProfile>>();
+		}
+		this.connections.put(relationType, connection);
+	}
+
+	// print out person profile
+	public void displayPersonProfile(PersonProfile person) {
+		
+		String image = Helper.validateString(person.getImage()) ? person.getImage() : "N/A";
+		String status = Helper.validateString(person.getStatus()) ? person.getStatus() : "N/A";
+		System.out.println("Name: " + person.getName());
+		if(!Helper.isEmptyString(image)){
+			System.out.println("Image:" + image);
+		}else{
+			System.out.println("Image: no image" );
+		}
+		System.out.println("Gender: " + person.getGender());
+		System.out.println("Age: " + person.getAge());
+		System.out.println("Status: " + status);
+		for (String key : connections.keySet()) {
+			System.out.print(key + ": ");
+			for (int i = 0; i < connections.get(key).size(); i++) {
+				System.out.print(connections.get(key).get(i).getName() + " ");
+			}
+			System.out.println();
+		}
+
+
+		System.out.println();
+
+	}
+
+	public abstract void addRelationship(String relationType, PersonProfile relatedPerson) throws Exception;
+	public abstract void removeRelationship(String relationType, PersonProfile relatedPerson);
+
+	public void setConnectionManipulator(ConnectionManipulator connectionManipulator){
+		this.connectionManipulator = connectionManipulator;
+	}
+	public ConnectionManipulator getConnectionManipulator() {
+		return connectionManipulator;
+	}
+	public ConnectionManipulator setConnectionManipulator() {
+		return connectionManipulator;
+	}
 }

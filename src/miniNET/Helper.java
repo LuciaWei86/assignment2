@@ -6,7 +6,6 @@ package miniNET;
 
 import miniNET.Constants.RelationshipConstant;
 import miniNET.Models.ChildProfile;
-import miniNET.Models.Connection;
 import miniNET.Models.PersonProfile;
 
 public class Helper {
@@ -19,38 +18,17 @@ public class Helper {
 		}
 	}
 
+	public static boolean isEmptyString(String str){
+		boolean isEmpty = str == null || str.trim().length() == 0;
+		return isEmpty;
+	}
+	
 	public static boolean isChild(int age) {
 		if (age <= 16) {
 			return true;
 		} else {
 			return false;
 		}
-	}
-
-	public static String findPersonFriendNames(PersonProfile personProfile) {
-		if (personProfile.getConnections() == null || personProfile.getConnections().isEmpty()) {
-			return "";
-		}
-		String names = "";
-		for (Connection connection : personProfile.getConnections()) {
-			if (connection.connectionType.equalsIgnoreCase(RelationshipConstant.FRIENDSHIP)) {
-				names = names + " " + connection.personProfile.getName();
-			}
-		}
-		return names;
-	}
-
-	public static String findPersonChildrenNames(PersonProfile personProfile) {
-		if (personProfile.getConnections() == null || personProfile.getConnections().isEmpty()) {
-			return "";
-		}
-		String names = "";
-		for (Connection connection : personProfile.getConnections()) {
-			if (connection.connectionType.equalsIgnoreCase(RelationshipConstant.PARENT)) {
-				names = names + " " + connection.personProfile.getName();
-			}
-		}
-		return names;
 	}
 
 	public static boolean isFromSameFamily(ChildProfile child1, ChildProfile child2) {

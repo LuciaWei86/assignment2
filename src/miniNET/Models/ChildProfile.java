@@ -5,108 +5,36 @@
 package miniNET.Models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import miniNET.Helper;
 import miniNET.Constants.RelationshipConstant;
+import miniNET.Models.Connections.FriendConnection;
+import miniNET.Models.Connections.ParentConnection;
 
 public class ChildProfile extends PersonProfile {
 	private AdultProfile parentA;
 	private AdultProfile parentB;
 
-	public ChildProfile(int age, String name, String image, String status, String gender,
-			ArrayList<Connection> connections, AdultProfile parentA, AdultProfile parentB) {
-		super(age, name, image, status, gender, new ArrayList<Connection>() {
-			{
-				new Connection(RelationshipConstant.DEPENDENT, parentA);
-			}
-			{
-				new Connection(RelationshipConstant.DEPENDENT, parentB);
-			}
-		});
-		this.parentA = parentA;
-		this.parentB = parentB;
-		dependentConnection(parentA, parentB);
-	}
-
-	public ChildProfile(int age, String name, String image, String status, String gender, AdultProfile parentA,
-			AdultProfile parentB) {
-
-		super(age, name, image, status, gender, new ArrayList<Connection>() {
-			{
-				new Connection(RelationshipConstant.DEPENDENT, parentA);
-			}
-			{
-				new Connection(RelationshipConstant.DEPENDENT, parentB);
-			}
-		});
-		this.parentA = parentA;
-		this.parentB = parentB;
-		dependentConnection(parentA, parentB);
-	}
-
-	public ChildProfile(int age, String name, String gender, AdultProfile parentA,
-			AdultProfile parentB) {
-		super(age, name, gender, new ArrayList<Connection>() {
-			{
-				new Connection(RelationshipConstant.DEPENDENT, parentA);
-			}
-			{
-				new Connection(RelationshipConstant.DEPENDENT, parentB);
-			}
-		});
-		this.parentA = parentA;
-		this.parentB = parentB;
-		dependentConnection(parentA, parentB);
-	}
-
 	public ChildProfile() {
-		// TODO Auto-generated constructor stub
 	}
 
-	private void dependentConnection(AdultProfile parentA, AdultProfile parentB) {
-		Connection relationA = new Connection(RelationshipConstant.PARENT, this);
-		Connection relationB = new Connection(RelationshipConstant.PARENT, this);
-		Connection coupleConnectParentB = new Connection(RelationshipConstant.COUPLE, parentB);
-		Connection coupleConnectParentA = new Connection(RelationshipConstant.COUPLE, parentA);
-		parentA.addConnections(coupleConnectParentB);
-		parentB.addConnections(coupleConnectParentA);
-		parentA.addConnections(relationA);
-		parentB.addConnections(relationB);
+	public ChildProfile(String name, String image, String status, String gender, int age) {
+		this.setConnections(new HashMap<String,ArrayList<PersonProfile>>());
+		this.setName(name);
+		this.setImage(image);
+		this.setStatus(status);
+		this.setGender(gender);
+		this.setAge(age);
+		this.parentA = new AdultProfile();
+		this.parentB = new AdultProfile();
+		
 	}
 
-	@Override
-	public void displayPersonProfile(PersonProfile person) {
-		ChildProfile child = (ChildProfile) person;
-		String image = Helper.validateString(child.getImage()) ? child.getImage() : "N/A";
-		String status = Helper.validateString(child.getStatus()) ? child.getStatus() : "N/A";
-		System.out.println("Name: " + child.getName());
-		System.out.println("Gender: " + child.getGender());
-		System.out.println("Age: " + child.getAge());
-		System.out.println("Profile Image:" + image);
-		System.out.println("Status: " + status);
-		System.out.println("Parent: " + child.parentA.getName() + " and " + child.parentB.getName());
-		if (!Helper.findPersonFriendNames(child).isEmpty()) {
-			System.out.println("Friends: " + Helper.findPersonFriendNames(child));
-		}
+	private void addParent(AdultProfile parent1, AdultProfile parent2) throws Exception {
+		this.setConnectionManipulator(new ParentConnection(parent1,parent2,this));
+		this.getConnectionManipulator().add();
 	}
-
-	@Override
-	public void connectToPeople(PersonProfile person1, PersonProfile person2, String relationShip) {
-		ChildProfile child1 = (ChildProfile) person1;
-		ChildProfile child2 = (ChildProfile) person2;
-		int ageDiff = Math.abs(child1.getAge() - child2.getAge());
-		if (ageDiff <= 3 && !Helper.isFromSameFamily(child1, child2)) {
-			if (relationShip.equalsIgnoreCase(RelationshipConstant.FRIENDSHIP)) {
-				Connection connectionWithPerson1 = new Connection(relationShip, child2);
-				Connection connectionWithPerson2 = new Connection(relationShip, child1);
-				child1.addConnections(connectionWithPerson1);
-				child2.addConnections(connectionWithPerson2);
-			}
-			System.out.println("Success");
-		} else {
-			System.out.println("Failed");
-		}
-	}
-
 	public AdultProfile getParentA() {
 		return parentA;
 	}
@@ -121,5 +49,35 @@ public class ChildProfile extends PersonProfile {
 
 	public void setParentB(AdultProfile parentB) {
 		this.parentB = parentB;
+	}
+
+	@Override
+	public void addRelationship(String relationType, PersonProfile relatedPerson) throws Exception {
+		switch (relationType) {
+		case RelationshipConstant.FRIENDSHIP:
+			this.setConnectionManipulator(new FriendConnection(this, relatedPerson));
+			this.connectionManipulator.add();
+			break;
+		case RelationshipConstant.PARENT:
+			
+			if(parentA==null) {
+				parentA= (AdultProfile) relatedPerson;
+			}
+			else if(parentB==null)  {
+				parentB= (AdultProfile) relatedPerson;
+			}
+			if(parentA!=null&&parentB!=null)
+				addParent(parentA,parentB);
+			break;
+		default:
+			break;
+		}
+		
+	}
+
+	@Override
+	public void removeRelationship(String relationType, PersonProfile relatedPerson) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,65 +1,58 @@
-/*
- * Author: s3681944 Qi Jin
- *  
- *  */
 package miniNET.Models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import miniNET.Helper;
+import miniNET.Constants.RelationshipConstant;
+import miniNET.Models.Connections.CoupleConnection;
+import miniNET.Models.Connections.FriendConnection;
 
 public class AdultProfile extends PersonProfile {
-	public AdultProfile(int age, String name, String image, String status, String gender,
-			ArrayList<Connection> connections) {
-		super(age, name, image, status, gender, connections);
-	}
 
 	public AdultProfile() {
 	}
 
-	public AdultProfile(int age, String name, String status, String image, String gender) {
-		super(age, name, image, status, gender);
+
+	public AdultProfile(String name, String image, String status, String gender, int age) {
+		this.setConnections(new HashMap<String,ArrayList<PersonProfile>>());
+		this.setName(name);
+		this.setImage(image);
+		this.setStatus(status);
+		this.setGender(gender);
+		this.setAge(age);
 	}
 
-	public AdultProfile(int age, String name, String gender) {
-		super(age, name, gender);
-	}
-
-	public AdultProfile(int age, String name, String gender, ArrayList<Connection> connections) {
-		super(age, name, gender, connections);
-	}
 
 	@Override
-	public void displayPersonProfile(PersonProfile adult) {
-		AdultProfile person = (AdultProfile) adult;
-		String image = Helper.validateString(person.getImage()) ? person.getImage() : "N/A";
-		String status = Helper.validateString(person.getStatus()) ? person.getStatus() : "N/A";
-		System.out.println("Name: " + person.getName());
-		System.out.println("Gender: " + person.getGender());
-		System.out.println("Age: " + person.getAge());
-		System.out.println("Profile Image:" + image);
-		System.out.println("Status: " + status);
-		if (!Helper.findPersonFriendNames(person).isEmpty()) {
-			System.out.println("Friends: " + Helper.findPersonFriendNames(person));
-		}
-		if (!Helper.findPersonChildrenNames(person).isEmpty()) {
-			System.out.println("Children: " + Helper.findPersonChildrenNames(person));
+	public void addRelationship(String relationType, PersonProfile relatedPerson) throws Exception {
+		switch (relationType) {
+		case RelationshipConstant.FRIENDSHIP:
+			this.setConnectionManipulator(new FriendConnection(this, relatedPerson));
+			this.connectionManipulator.add();
+			break;
+		case RelationshipConstant.COUPLE:
+			this.setConnectionManipulator(new CoupleConnection(this, relatedPerson));
+			this.connectionManipulator.add();
+			break;
+		default:
+			break;
 		}
 	}
 
 	@Override
-	public void connectToPeople(PersonProfile person1, PersonProfile person2, String relationShip) {
-		Connection connectionWithPerson1 = new Connection(relationShip, person2);
-		Connection connectionWithPerson2 = new Connection(relationShip, person1);
-		if (person1.getConnections() == null) {
-			ArrayList<Connection> connections = new ArrayList<Connection>();
-			person1.setConnections(connections);
+	public void removeRelationship(String relationType, PersonProfile relatedPerson) {
+		switch (relationType) {
+		case RelationshipConstant.FRIENDSHIP:
+			this.setConnectionManipulator(new FriendConnection(this, relatedPerson));
+			this.connectionManipulator.remove();
+			break;
+		case RelationshipConstant.COUPLE:
+			this.setConnectionManipulator(new CoupleConnection(this, relatedPerson));
+			this.connectionManipulator.remove();
+			break;
+		default:
+			break;
 		}
-		if (person2.getConnections() == null) {
-			ArrayList<Connection> connections = new ArrayList<Connection>();
-			person2.setConnections(connections);
-		}
-		person1.addConnections(connectionWithPerson1);
-		person2.addConnections(connectionWithPerson2);
+
 	}
 }
