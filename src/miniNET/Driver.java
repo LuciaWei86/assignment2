@@ -149,19 +149,22 @@ public class Driver {
 
 	public PersonProfile addPerson(String name, String image, String status, String gender, int personAge) {
 		PersonProfile person;
-		for (String pn : personName) {
+		for (String pn : personStorage.keySet()) {
 			if (name.equalsIgnoreCase(pn)) {
 				return null;
 			}
 		}
 		if (personAge < 3) {
 			person = new YoungChildProfile(name, image, status, gender, personAge);
+			personStorage.put(name, person);
 			return person;
 		} else if (personAge <= 16) {
 			person = new ChildProfile(name, image, status, gender, personAge);
+			personStorage.put(name, person);
 			return person;
 		} else {
 			person = new AdultProfile(name, image, status, gender, personAge);
+			personStorage.put(name, person);
 			return person;
 		}
 	}

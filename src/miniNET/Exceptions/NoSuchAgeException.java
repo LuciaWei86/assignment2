@@ -2,10 +2,9 @@ package miniNET.Exceptions;
 
 import javafx.scene.control.Alert;
 
-public class NoSuchAgeException extends Exception{
+public class NoSuchAgeException extends Exception {
 
-	public void noSuchAgeWarning()
-	{
+	public void noSuchAgeWarning() {
 		Alert alert = new Alert(Alert.AlertType.WARNING);
 		alert.setTitle("MESSAGES");
 		alert.setHeaderText("WARNING!");

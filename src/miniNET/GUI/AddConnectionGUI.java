@@ -1,7 +1,5 @@
 package miniNET.GUI;
 
-import java.util.ArrayList;
-
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -106,7 +104,6 @@ public class AddConnectionGUI {
 		// } catch (NotToBeClassmatesException e1) {
 		// e1.notToBeClassmatesWarning();
 		// } catch (AlreadyHaveRelationException e2) {
-		// // TODO Auto-generated catch block
 		// e2.alreadyHaveRelationWarning();
 		// }
 
