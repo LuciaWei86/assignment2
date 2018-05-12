@@ -38,10 +38,8 @@ public class Menu {
 		pane.add(addPersonBt, 0, 1);
 		Button selectPersonBt = new Button("2. Select a Person");
 		pane.add(selectPersonBt, 0, 2);
-		Button deletePersonBt = new Button("3. Delete a Person");
-		pane.add(deletePersonBt, 0, 3);
-		Button defineReBt = new Button("4. Define relationship");
-		pane.add(defineReBt, 0, 4);
+		Button defineReBt = new Button("3. Define relationship");
+		pane.add(defineReBt, 0, 3);
 		Button exitBt = new Button("Exit");
 		pane.add(exitBt, 0, 5);
 
@@ -53,8 +51,6 @@ public class Menu {
           window.setScene(new SelectPersonGUI().individualMainScene());
         });
 
-//        deletePersonBt.setOnAction(e -> {
-//        });
 //        
 //        defineReBt.setOnAction(e -> {
 //        });

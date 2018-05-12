@@ -26,7 +26,7 @@ public class SelectPersonGUI {
 		GridPane pane = Menu.setUpPane();
 		Label label = new Label("Please select one person");
 		Button select = new Button("Select");
-		Button cancel = new Button("Cancel");
+		Button back = new Button("Back");
 		VBox layout = new VBox(10);
 
 		ListView<String> personList = new ListView<>();
@@ -38,7 +38,7 @@ public class SelectPersonGUI {
 		pane.add(label, 0, 0);
 		pane.add(layout, 0, 1);
 		pane.add(select, 0, 2);
-		pane.add(cancel, 1, 2);
+		pane.add(back, 1, 2);
 
 		select.setOnAction(e -> {
 			String personName = personList.getSelectionModel().getSelectedItem();
@@ -46,7 +46,7 @@ public class SelectPersonGUI {
 			Menu.window.setScene(viewPersonScene(selectedPerson));
 
 		});
-		cancel.setOnAction(e -> {
+		back.setOnAction(e -> {
 			Menu.window.setScene(Menu.startScene());
 		});
 		Scene scene = new Scene(pane, 400, 400);
