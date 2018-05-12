@@ -1,0 +1,5 @@
+/*C4*/SET SCHEMA PUBLIC
+drop table barcodes if exists
+create table barcodes (id integer, barcode varchar(20) not null)
+INSERT INTO BARCODES VALUES(1,'12345577')
+COMMIT

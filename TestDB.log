@@ -1,8 +1,13 @@
-/*C1*/SET SCHEMA SYSTEM_LOBS
-INSERT INTO BLOCKS VALUES(0,2147483647,0)
+/*C3*/SET SCHEMA PUBLIC
+drop table people if exists
+create table people (name varchar(20)  not null, image varchar(20), status varchar(20), gender varchar(10), age integer not null)
+INSERT INTO PEOPLE VALUES('Alex Smith','','student at RMIT','M',21)
 COMMIT
-/*C2*/SET SCHEMA PUBLIC
-drop table barcodes if exists
-create table barcodes (id integer, barcode varchar(20) not null)
-INSERT INTO BARCODES VALUES(1,'12345577')
+INSERT INTO PEOPLE VALUES('Ben Turner','BenPhoto.jpg','manager at Coles','M',35)
+COMMIT
+INSERT INTO PEOPLE VALUES('Hannah White','Hannah.png','student at PLC','F',14)
+COMMIT
+INSERT INTO PEOPLE VALUES('Zoe Foster','','Founder of ZFX','M',28)
+COMMIT
+INSERT INTO PEOPLE VALUES('Mark Turner','Mark.jpeg','','M',2)
 COMMIT

@@ -100,16 +100,16 @@ public abstract class PersonProfile {
 		} else {
 			System.out.println("N/A");
 		}
-		for (String key : connections.keySet()) {
-			System.out.print(key + ": ");
-			for (int i = 0; i < connections.get(key).size(); i++) {
-				System.out.print(connections.get(key).get(i).getName() + " ");
+		if (!connections.isEmpty()) {
+			for (String key : connections.keySet()) {
+				System.out.print(key + ": ");
+				for (int i = 0; i < connections.get(key).size(); i++) {
+					System.out.print(connections.get(key).get(i).getName() + " ");
+				}
+				System.out.println();
 			}
-			System.out.println();
 		}
-
 		System.out.println();
-
 	}
 
 	public abstract void addRelationship(String relationType, PersonProfile relatedPerson) throws Exception;
