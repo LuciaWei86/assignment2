@@ -26,7 +26,6 @@ public class ParentConnection implements ConnectionManipulator {
 			parent1.setConnectionManipulator(new CoupleConnection(parent1, parent2));		
 		}
 		else 
-			System.out.println(parent1.getConnections().keySet());
 			if(!parent1.getConnections().containsKey(RelationshipConstant.CHILD))
 			{
 				parent1.getConnections().put(RelationshipConstant.CHILD, new ArrayList<PersonProfile>());
@@ -51,8 +50,8 @@ public class ParentConnection implements ConnectionManipulator {
 
 	@Override
 	public void remove() {
-		parent1.getConnections().get("child").remove(child);
-		parent2.getConnections().get("child").remove(child);
+		parent1.getConnections().get(RelationshipConstant.CHILD).remove(child);
+		parent2.getConnections().get(RelationshipConstant.CHILD).remove(child);
 		
 	}
 

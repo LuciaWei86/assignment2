@@ -1,12 +1,14 @@
 package miniNET.GUI;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -15,6 +17,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import miniNET.Helper;
+import miniNET.Constants.RelationshipConstant;
+import miniNET.Exceptions.DeleteParentAlertGUI;
 import miniNET.Models.PersonProfile;
 
 public class SelectPersonGUI {
@@ -54,15 +58,13 @@ public class SelectPersonGUI {
 		Label label = new Label("Please choose one: ");
 		Button btDisplay = new Button("Display profile");
 		Button btRelation = new Button("Display relations");
-		Button btFindRelation = new Button("Find out the parent or child of the person");
 		Button btDelete = new Button("Delete this person");
 		Button btBack = new Button("Back");
 
 		pane.add(label, 0, 0);
 		pane.add(btDisplay, 0, 1);
 		pane.add(btRelation, 0, 2);
-		pane.add(btFindRelation, 0, 3);
-		pane.add(btDelete, 0, 4);
+		pane.add(btDelete, 0, 3);
 		pane.add(btBack, 0, 5);
 
 		btDisplay.setOnAction(e -> {
@@ -74,12 +76,8 @@ public class SelectPersonGUI {
 			displayRelationAction(person);
 		});
 
-		btFindRelation.setOnAction(e -> {
-
-		});
-
 		btDelete.setOnAction(e -> {
-
+			deletePersonAction(person);
 		});
 
 		btBack.setOnAction(e -> {
@@ -88,6 +86,35 @@ public class SelectPersonGUI {
 
 		Scene scene = new Scene(pane, 700, 500);
 		return scene;
+	}
+
+	private void deletePersonAction(PersonProfile person) {
+		if (showDeletePersonMessage(true)) {
+			Menu.driver.deletePerson(person);
+			if(person.getConnections().containsKey(RelationshipConstant.CHILD)){
+				DeleteParentAlertGUI.deleteParentAlert();
+			}
+			showDeletePersonMessage(false);
+		}
+	}
+
+	private boolean showDeletePersonMessage(boolean b) {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("MESSAGES");
+		if (b) {
+			alert.setHeaderText("WARNING!");
+			alert.setContentText(
+					"Are you sure you want to delete this person?");
+		} else {
+			alert.setHeaderText("successful!");
+		}
+		Optional<ButtonType> result = alert.showAndWait();
+		if(result.get() == ButtonType.OK) {
+			return true;
+		}else if(result.get() == ButtonType.CANCEL) {
+			alert.close();
+		}
+		return false;
 	}
 
 	private void displayRelationAction(PersonProfile person) {
@@ -101,8 +128,7 @@ public class SelectPersonGUI {
 					i++;
 				}
 			}
-		} else
-		{
+		} else {
 			Text text1 = new Text("No relationship found of" + " " + person.getName());
 			text1.setFill(Color.RED);
 			pane.add(text1, 0, 0);

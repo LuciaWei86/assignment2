@@ -71,7 +71,7 @@ public class DbHelper {
 		connection.commit();
 	}
 
-	public HashMap<String, PersonProfile> viewData() throws Exception {
+	public HashMap<String, PersonProfile> viewData() throws SQLException  {
 		rs = connection.prepareStatement("select * from people;").executeQuery();
 
 		while (rs.next()) {

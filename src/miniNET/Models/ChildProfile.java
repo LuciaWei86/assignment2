@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import miniNET.Constants.RelationshipConstant;
+import miniNET.Models.Connections.CoupleConnection;
 import miniNET.Models.Connections.FriendConnection;
 import miniNET.Models.Connections.ParentConnection;
 
@@ -20,6 +21,7 @@ public class ChildProfile extends PersonProfile {
 
 	public ChildProfile(String name, String image, String status, String gender, int age) {
 		this.setConnections(new HashMap<String, ArrayList<PersonProfile>>());
+		this.getConnections().put(RelationshipConstant.PARENT,new ArrayList<PersonProfile>());
 		this.setName(name);
 		this.setImage(image);
 		this.setStatus(status);
@@ -76,7 +78,21 @@ public class ChildProfile extends PersonProfile {
 
 	@Override
 	public void removeRelationship(String relationType, PersonProfile relatedPerson) {
-		// TODO Auto-generated method stub
+		switch (relationType) {
+		case RelationshipConstant.FRIENDSHIP:
+			this.setConnectionManipulator(new FriendConnection(this, relatedPerson));
+			this.connectionManipulator.remove();
+			break;
+		case RelationshipConstant.PARENT:
+			if(parentA.getName().equals(relatedPerson.getName()))
+			{
+				this.setConnectionManipulator(new ParentConnection(parentA,parentB,this));
+				this.connectionManipulator.remove();
+			}
+			break;
+		default:
+			break;
+		}
 
 	}
 }

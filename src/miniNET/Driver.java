@@ -17,6 +17,9 @@ import java.util.HashMap;
 import org.hsqldb.HsqlException;
 
 import Database.DbHelper;
+import miniNET.Constants.RelationshipConstant;
+import miniNET.Exceptions.DeleteParentAlertGUI;
+import miniNET.Exceptions.NoParentException;
 import miniNET.GUI.NoFileAlertGUI;
 import miniNET.Models.*;
 
@@ -26,7 +29,7 @@ public class Driver {
 	ArrayList<String> personName = new ArrayList<String>();
 	private DbHelper dbHelper = new DbHelper();
 
-	public void initialData() throws Exception {
+	public void initialData() throws ClassNotFoundException, HsqlException, SQLException, BindException {
 		String[] pTextData = null;
 		String[] rTextData = null;
 		PersonProfile person = null;
@@ -83,17 +86,14 @@ public class Driver {
 
 		try {
 			addRelationToPerson();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (NoParentException e) {
+			e.noParentException();
 		}
-
-		// for (String name : personStorage.keySet()) {
-		// personStorage.get(name).displayPersonProfile(personStorage.get(name));
-		// }
-
 	}
 
-	private void addRelationToPerson() {
+	private void addRelationToPerson() throws NoParentException {
+		ArrayList<PersonProfile> childWithNoParent = new ArrayList();
+
 		for (String[] r : relationData) {
 			for (String name : personStorage.keySet()) {
 				if (name.equalsIgnoreCase(r[0].trim())) {
@@ -110,6 +110,43 @@ public class Driver {
 					}
 
 				}
+			}
+		}
+
+		for (PersonProfile p : personStorage.values()) {
+			if (!(p instanceof AdultProfile))
+				if (p.getConnections().containsKey(RelationshipConstant.PARENT)
+						&& p.getConnections().get(RelationshipConstant.PARENT).size() < 2) {
+					childWithNoParent.add(p);
+				}
+		}
+		if (childWithNoParent.size() > 0) {
+			for (PersonProfile child : childWithNoParent) {
+				deletePerson(child);
+			}
+			throw new NoParentException(childWithNoParent);
+		}
+	}
+
+	public void deletePerson(PersonProfile person) {
+		ArrayList<PersonProfile> childrenList = new ArrayList<PersonProfile>();
+		for (String type : person.getConnections().keySet()) {
+			for (PersonProfile relatedPerson : person.getConnections().get(type)) {
+				person.removeRelationship(type, relatedPerson);
+				if (type == RelationshipConstant.CHILD) {
+					childrenList.add(relatedPerson);
+				}
+			}
+		}
+		personStorage.remove(person.getName());
+		if (childrenList.size() > 0) {
+			for (PersonProfile child : childrenList) {
+				for (String type : child.getConnections().keySet()) {
+					for (PersonProfile relatedPerson : child.getConnections().get(type)) {
+						child.removeRelationship(type, relatedPerson);
+					}
+				}
+				personStorage.remove(child.getName());
 			}
 		}
 	}

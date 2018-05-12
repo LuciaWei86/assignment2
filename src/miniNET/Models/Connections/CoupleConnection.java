@@ -37,17 +37,17 @@ public class CoupleConnection implements ConnectionManipulator {
 	@Override
 	public void remove() {
 		partner.getConnections().remove(RelationshipConstant.COUPLE);
-
-		if (person.getConnections().containsKey(RelationshipConstant.CHILD)) {
-			for (PersonProfile child : person.getConnections().get(RelationshipConstant.CHILD)) {
-				for (String relationType : child.getConnections().keySet()) {
-					for (PersonProfile childRelation : child.getConnections().get(relationType))
-						child.removeRelationship(relationType, childRelation);
-				}
-
-			}
-			partner.getConnections().remove(RelationshipConstant.CHILD);
-		}
+//
+//		if (person.getConnections().containsKey(RelationshipConstant.CHILD)) {
+//			for (PersonProfile child : person.getConnections().get(RelationshipConstant.CHILD)) {
+//				for (String relationType : child.getConnections().keySet()) {
+//					for (PersonProfile childRelation : child.getConnections().get(relationType))
+//						child.removeRelationship(relationType, childRelation);
+//				}
+//
+//			}
+//			partner.getConnections().remove(RelationshipConstant.CHILD);
+//		}
 
 	}
 

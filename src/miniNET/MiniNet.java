@@ -1,6 +1,10 @@
 package miniNET;
 
 import java.io.IOException;
+import java.net.BindException;
+import java.sql.SQLException;
+
+import org.hsqldb.HsqlException;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -22,12 +26,25 @@ public class MiniNet extends Application {
 		window.show();
 		try {
 			driver.initialData();
-		} catch (Exception e) {
-			NoDbAlertGUI alert = new NoDbAlertGUI();
-			alert.noDbAlert();
+		} catch (ClassNotFoundException e) {
+			handleDbException();
 			e.printStackTrace();
-			window.close();
+		} catch (HsqlException e1) {
+			handleDbException();
+			e1.printStackTrace();
+		} catch (SQLException e2) {
+			handleDbException();
+			e2.printStackTrace();
+		} catch (BindException e3) {
+			handleDbException();
+			e3.printStackTrace();
 		}
+	}
+
+	private void handleDbException() {
+		NoDbAlertGUI alert = new NoDbAlertGUI();
+		alert.noDbAlert();
+		window.close();
 	}
 
 	public static void main(String[] args) {
