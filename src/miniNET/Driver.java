@@ -81,7 +81,7 @@ public class Driver {
 			dbHelper.makeDbConnection();
 			personStorage = dbHelper.viewData();
 			dbHelper.closeConnection();
-			dbHelper.shutdownDb();
+
 		}
 
 		try {

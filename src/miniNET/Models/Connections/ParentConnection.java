@@ -52,7 +52,6 @@ public class ParentConnection implements ConnectionManipulator {
 	public void remove() {
 		parent1.getConnections().get(RelationshipConstant.CHILD).remove(child);
 		parent2.getConnections().get(RelationshipConstant.CHILD).remove(child);
-		
 	}
 
 }

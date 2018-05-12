@@ -1,5 +1,6 @@
 package miniNET.GUI;
 
+import Database.DbHelper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ public class Menu {
 
 	static public Stage window;
 	static public Driver driver;
+	private static DbHelper dbHelper = new DbHelper();
 
 	public Menu(Stage window, Driver driver) {
 		Menu.window = window;
@@ -56,6 +58,7 @@ public class Menu {
 //        });
 
 		exitBt.setOnAction(event -> {
+			dbHelper.shutdownDb();
 			window.close();
 		});
 

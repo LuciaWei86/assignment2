@@ -42,9 +42,15 @@ public class SelectPersonGUI {
 
 		select.setOnAction(e -> {
 			String personName = personList.getSelectionModel().getSelectedItem();
-			PersonProfile selectedPerson = Menu.driver.findPersonByName(personName);
-			Menu.window.setScene(viewPersonScene(selectedPerson));
-
+			if (personName != null){
+				PersonProfile selectedPerson = Menu.driver.findPersonByName(personName);
+				Menu.window.setScene(viewPersonScene(selectedPerson));
+			}else{
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+				alert.setTitle("MESSAGES");
+				alert.setContentText("Must choose one from list");
+				alert.show();
+			}
 		});
 		back.setOnAction(e -> {
 			Menu.window.setScene(Menu.startScene());
