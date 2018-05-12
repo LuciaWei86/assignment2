@@ -72,7 +72,7 @@ public class DbHelper {
 	}
 
 	public HashMap<String, PersonProfile> viewData() throws Exception {
-		rs = connection.prepareStatement("select * from peoples;").executeQuery();
+		rs = connection.prepareStatement("select * from people;").executeQuery();
 
 		while (rs.next()) {
 			PersonProfile person = null;

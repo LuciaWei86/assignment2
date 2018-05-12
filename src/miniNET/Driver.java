@@ -48,7 +48,7 @@ public class Driver {
 		}
 
 		try {
-			BufferedReader getPeopleFromFile = new BufferedReader(new FileReader("src/miniNET/DataSeed/peoples.txt"));
+			BufferedReader getPeopleFromFile = new BufferedReader(new FileReader("src/miniNET/DataSeed/people.txt"));
 			String currentLine2;
 			while ((currentLine2 = getPeopleFromFile.readLine()) != null) {
 				pTextData = currentLine2.split(",");
