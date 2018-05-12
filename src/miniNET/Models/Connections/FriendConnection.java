@@ -5,9 +5,11 @@ import java.util.HashMap;
 
 import miniNET.Exceptions.NotToBeFriendsException;
 import miniNET.Exceptions.TooYoungException;
+import miniNET.Models.AdultProfile;
 import miniNET.Models.ChildProfile;
 import miniNET.Models.PersonProfile;
 import miniNET.Models.YoungChildProfile;
+import miniNET.Helper;
 import miniNET.Constants.RelationshipConstant;
 
 public class FriendConnection implements ConnectionManipulator {
@@ -29,11 +31,14 @@ public class FriendConnection implements ConnectionManipulator {
 		if (!friend.getConnections().containsKey(RelationshipConstant.FRIENDSHIP)) {
 			friend.getConnections().put(RelationshipConstant.FRIENDSHIP, new ArrayList<PersonProfile>());
 		}
-		if (friend instanceof ChildProfile)
+		if (person instanceof AdultProfile && friend instanceof ChildProfile)
 			throw new NotToBeFriendsException(person, friend);
-		else if (friend instanceof YoungChildProfile) {
+		else if (friend instanceof YoungChildProfile || person instanceof YoungChildProfile) {
 			throw new TooYoungException(person);
-		} else {
+		} else if(person instanceof ChildProfile && friend instanceof ChildProfile && !Helper.isAgeValid(person, friend)){
+			throw new NotToBeFriendsException(person, friend);
+		}
+		else {
 			friend.getConnections().get(RelationshipConstant.FRIENDSHIP).add(person);
 		}
 	}

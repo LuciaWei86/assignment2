@@ -6,9 +6,7 @@
 package miniNET;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.net.BindException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,7 +16,6 @@ import org.hsqldb.HsqlException;
 
 import Database.DbHelper;
 import miniNET.Constants.RelationshipConstant;
-import miniNET.Exceptions.DeleteParentAlertGUI;
 import miniNET.Exceptions.NoParentException;
 import miniNET.GUI.NoFileAlertGUI;
 import miniNET.Models.*;
@@ -81,7 +78,7 @@ public class Driver {
 			dbHelper.makeDbConnection();
 			personStorage = dbHelper.viewData();
 			dbHelper.closeConnection();
-
+			dbHelper.shutdownDb();
 		}
 
 		try {
@@ -92,8 +89,7 @@ public class Driver {
 	}
 
 	private void addRelationToPerson() throws NoParentException {
-		ArrayList<PersonProfile> childWithNoParent = new ArrayList();
-
+		ArrayList<PersonProfile> childWithNoParent = new ArrayList<PersonProfile>();
 		for (String[] r : relationData) {
 			for (String name : personStorage.keySet()) {
 				if (name.equalsIgnoreCase(r[0].trim())) {

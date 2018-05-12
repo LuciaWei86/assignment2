@@ -1,6 +1,5 @@
 package miniNET;
 
-import java.io.IOException;
 import java.net.BindException;
 import java.sql.SQLException;
 
@@ -21,7 +20,8 @@ public class MiniNet extends Application {
 		Driver driver = new Driver();
 		window = primaryStage;
 		window.setTitle("MiniNet");
-		window.setScene(new Menu(window, driver).startScene());
+		new Menu(window, driver);
+		window.setScene(Menu.startScene());
 		window.setResizable(false);
 		window.show();
 		try {

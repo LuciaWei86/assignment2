@@ -51,7 +51,6 @@ public class DbHelper {
 
 	public void makeDbConnection() throws SQLException, ClassNotFoundException, BindException, HsqlException {
 
-		ResultSet rs = null;
 		hsqlServer = new Server();
 		hsqlServer.shutdown();
 		hsqlServer.setLogWriter(null);

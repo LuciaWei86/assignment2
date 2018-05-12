@@ -11,3 +11,4 @@ INSERT INTO PEOPLE VALUES('Zoe Foster','','Founder of ZFX','M',28)
 COMMIT
 INSERT INTO PEOPLE VALUES('Mark Turner','Mark.jpeg','','M',2)
 COMMIT
+DISCONNECT

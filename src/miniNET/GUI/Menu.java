@@ -40,8 +40,6 @@ public class Menu {
 		pane.add(addPersonBt, 0, 1);
 		Button selectPersonBt = new Button("2. Select a Person");
 		pane.add(selectPersonBt, 0, 2);
-		Button defineReBt = new Button("3. Define relationship");
-		pane.add(defineReBt, 0, 3);
 		Button exitBt = new Button("Exit");
 		pane.add(exitBt, 0, 5);
 
@@ -53,12 +51,7 @@ public class Menu {
           window.setScene(new SelectPersonGUI().individualMainScene());
         });
 
-//        
-//        defineReBt.setOnAction(e -> {
-//        });
-
 		exitBt.setOnAction(event -> {
-			dbHelper.shutdownDb();
 			window.close();
 		});
 

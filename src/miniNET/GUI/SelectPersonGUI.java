@@ -62,16 +62,18 @@ public class SelectPersonGUI {
 	private Scene viewPersonScene(PersonProfile person) {
 		GridPane pane = Menu.setUpPane();
 		Label label = new Label("Please choose one: ");
-		Button btDisplay = new Button("Display profile");
-		Button btRelation = new Button("Display relations");
-		Button btDelete = new Button("Delete this person");
+		Button btDisplay = new Button("1.Display profile");
+		Button btRelation = new Button("2.Display relations");
+		Button btDelete = new Button("3.Delete this person");
+		Button btConnect = new Button("4.Make connection with other person");
 		Button btBack = new Button("Back");
 
 		pane.add(label, 0, 0);
 		pane.add(btDisplay, 0, 1);
 		pane.add(btRelation, 0, 2);
 		pane.add(btDelete, 0, 3);
-		pane.add(btBack, 0, 5);
+		pane.add(btConnect, 0, 4);
+		pane.add(btBack, 0, 7);
 
 		btDisplay.setOnAction(e -> {
 			displayProfileAction(person);
@@ -85,7 +87,11 @@ public class SelectPersonGUI {
 		btDelete.setOnAction(e -> {
 			deletePersonAction(person);
 		});
-
+		
+		btConnect.setOnAction(e -> {
+			Menu.window.setScene(new AddConnectionGUI().addConnectionScene(person));
+		});
+		
 		btBack.setOnAction(e -> {
 			Menu.window.setScene(individualMainScene());
 		});
@@ -95,16 +101,16 @@ public class SelectPersonGUI {
 	}
 
 	private void deletePersonAction(PersonProfile person) {
-		if (showDeletePersonMessage(true)) {
+		if (deletePerson(true)) {
 			Menu.driver.deletePerson(person);
 			if(person.getConnections().containsKey(RelationshipConstant.CHILD)){
 				DeleteParentAlertGUI.deleteParentAlert();
 			}
-			showDeletePersonMessage(false);
+			deletePerson(false);
 		}
 	}
 
-	private boolean showDeletePersonMessage(boolean b) {
+	private boolean deletePerson(boolean b) {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("MESSAGES");
 		if (b) {

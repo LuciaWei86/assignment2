@@ -3,23 +3,27 @@
  *  
  *  */
 package miniNET;
+
 import miniNET.Models.ChildProfile;
+import miniNET.Models.PersonProfile;
 
 public class Helper {
 
-	public static boolean validateString(String status) {
-		if (status != null) {
-			return true;
-		} else {
-			return false;
+	public static boolean isExistedRelation(PersonProfile person, PersonProfile relatedPerson) {
+		for (String relation : person.getConnections().keySet()) {
+			for (PersonProfile alreadyConnectedPerson : person.getConnections().get(relation)) {
+				if (alreadyConnectedPerson.equals(relatedPerson))
+					return true;
+			}
 		}
+		return false;
 	}
 
-	public static boolean isEmptyString(String str){
+	public static boolean isEmptyString(String str) {
 		boolean isEmpty = str == null || str.trim().length() == 0;
 		return isEmpty;
 	}
-	
+
 	public static boolean isChild(int age) {
 		if (age <= 16) {
 			return true;
@@ -34,17 +38,12 @@ public class Helper {
 		return fromSameFamily;
 	}
 
-	public static boolean isAgeValid(ChildProfile child1, ChildProfile child2) {
-		boolean isAgeValid = Math.abs(child1.getAge() - child2.getAge()) <= 3 && child1.getAge() > 2
-				&& child2.getAge() > 2;
-		return isAgeValid;
-	}
+	 public static boolean isAgeValid(PersonProfile person, PersonProfile
+	 friend) {
+	 boolean isAgeValid = Math.abs(person.getAge() - friend.getAge()) <= 3 &&
+	 person.getAge() > 2
+	 && friend.getAge() > 2;
+	 return isAgeValid;
+	 }
 
-	public static boolean isYes(String string) {
-		if (string.equalsIgnoreCase("y") || string.equalsIgnoreCase("yes")) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 }

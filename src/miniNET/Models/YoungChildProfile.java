@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import miniNET.Helper;
 import miniNET.Constants.RelationshipConstant;
+import miniNET.Exceptions.TooYoungException;
 import miniNET.Models.Connections.FriendConnection;
 import miniNET.Models.Connections.ParentConnection;
 
@@ -30,18 +31,17 @@ public class YoungChildProfile extends PersonProfile {
 
 	@Override
 	public void addRelationship(String relationType, PersonProfile relatedPerson) throws Exception {
-		if (relationType.equals("parent")) {
-
+		if (relationType.equals(RelationshipConstant.PARENT)) {
 			if (parentA.getName() == null) {
 				parentA = (AdultProfile) relatedPerson;
 			} else {
 				parentB = (AdultProfile) relatedPerson;
 			}
-
 			if (parentA.getName() != null && parentB.getName() != null)
 				addParent(parentA, parentB);
+		}else if (relationType.equals(RelationshipConstant.FRIENDSHIP)){
+			throw new TooYoungException(this);
 		}
-
 	}
 
 	@Override

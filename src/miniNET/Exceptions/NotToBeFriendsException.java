@@ -1,5 +1,6 @@
 package miniNET.Exceptions;
 
+import javafx.scene.control.Alert;
 import miniNET.Models.PersonProfile;
 
 public class NotToBeFriendsException extends Exception{
@@ -9,6 +10,8 @@ public class NotToBeFriendsException extends Exception{
 		this.friend = friend;
 	}
 	public void notToBeFriendsException() {
-		System.out.println("you are trying to make friend with a young child.");
+		Alert alert = new Alert(Alert.AlertType.WARNING);
+		alert.setContentText("You cannot make friends connection with this person.");
+		alert.showAndWait();
 	}
 }
