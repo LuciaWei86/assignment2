@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 import miniNET.Constants.RelationshipConstant;
 import miniNET.Models.Connections.ClassmateConnection;
-import miniNET.Models.Connections.CoupleConnection;
 import miniNET.Models.Connections.FriendConnection;
 import miniNET.Models.Connections.ParentConnection;
 

@@ -68,7 +68,7 @@ public class AddConnectionGUI {
 		ToggleGroup group = loadRelationType(person);
 		ToggleGroup list = loadRelatedPerson(person);
 		btAdd.setOnAction(e -> {
-			if (group.getSelectedToggle() != null) {
+			if (group.getSelectedToggle() != null && list.getSelectedToggle() != null) {
 				String relation = (String) group.getSelectedToggle().getUserData();
 				PersonProfile relatedPerson = Menu.driver.findPersonByName((String) list.getSelectedToggle().getUserData());
 				if (Helper.isExistedRelation(person, relatedPerson)) {

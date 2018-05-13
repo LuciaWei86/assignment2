@@ -69,11 +69,11 @@ public class SelectPersonGUI {
 		Button btBack = new Button("Back");
 
 		pane.add(label, 0, 0);
-		pane.add(btDisplay, 0, 1);
-		pane.add(btRelation, 0, 2);
-		pane.add(btDelete, 0, 3);
-		pane.add(btConnect, 0, 4);
-		pane.add(btBack, 0, 7);
+		pane.add(btDisplay, 0, 2);
+		pane.add(btRelation, 0, 4);
+		pane.add(btDelete, 0, 6);
+		pane.add(btConnect, 0, 8);
+		pane.add(btBack, 0, 11);
 
 		btDisplay.setOnAction(e -> {
 			displayProfileAction(person);
@@ -96,7 +96,7 @@ public class SelectPersonGUI {
 			Menu.window.setScene(individualMainScene());
 		});
 
-		Scene scene = new Scene(pane, 700, 500);
+		Scene scene = new Scene(pane, 400, 400);
 		return scene;
 	}
 
@@ -119,6 +119,7 @@ public class SelectPersonGUI {
 					"Are you sure you want to delete this person?");
 		} else {
 			alert.setHeaderText("successful!");
+			Menu.window.setScene(individualMainScene());
 		}
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
@@ -131,7 +132,7 @@ public class SelectPersonGUI {
 
 	private void displayRelationAction(PersonProfile person) {
 		GridPane pane = Menu.setUpPane();
-		if (!person.getConnections().keySet().isEmpty()) {
+		if (!person.getConnections().keySet().isEmpty() || !person.getConnections().values().isEmpty()) {
 			int i = 0;
 			for (String type : person.getConnections().keySet()) {
 				ArrayList<PersonProfile> relationship = person.getConnections().get(type);
@@ -185,7 +186,7 @@ public class SelectPersonGUI {
 		pane.add(new Label(status), 4, 6);
 		pane.add(new Label(gender), 4, 7);
 
-		Scene scene = new Scene(pane, 500, 500);
+		Scene scene = new Scene(pane, 400, 400);
 		Menu.window.setScene(scene);
 		Menu.window.show();
 

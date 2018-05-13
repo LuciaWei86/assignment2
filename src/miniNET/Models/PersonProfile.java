@@ -2,8 +2,6 @@ package miniNET.Models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
 import miniNET.Helper;
 import miniNET.Models.Connections.ConnectionManipulator;
 
