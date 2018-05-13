@@ -5,9 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -24,7 +22,7 @@ public class AddConnectionGUI {
 		ToggleGroup group = new ToggleGroup();
 		VBox vbBox = new VBox(10);
 		vbBox.setPadding(new Insets(20, 20, 20, 20));
-		pane.add(new Label("Relation Type"), 0, 0);
+		pane.add(new Label("Relation Type"), 0, 3);
 		pane.add(vbBox, 0, 4);
 		if (person instanceof AdultProfile) {
 			for (String r : RelationshipConstant.ADULTRELATION) {
@@ -44,16 +42,21 @@ public class AddConnectionGUI {
 		return group;
 	}
 
-	private ListView<String> loadRelatedPerson(PersonProfile person) {
-		ListView<String> list = new ListView<>();
+	private ToggleGroup loadRelatedPerson(PersonProfile person) {
+		ToggleGroup group = new ToggleGroup();
+		VBox vbBox = new VBox(10);
+		vbBox.setPadding(new Insets(20, 20, 20, 20));
+		pane.add(new Label("Related to"), 6, 3);
+		pane.add(vbBox, 6, 4);
 		for (String personName : Menu.driver.loadPersonStorage().keySet()) {
-			if (!personName.equals(person.getName()))
-				list.getItems().add(personName);
+			if (!personName.equals(person.getName())){
+				RadioButton button = new RadioButton(personName);
+				button.setToggleGroup(group);
+				button.setUserData(personName);
+				vbBox.getChildren().add(button);
+			}
 		}
-		list.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		pane.add(new Label("Related to"), 6, 0);
-		pane.add(list, 6, 4);
-		return list;
+		return group;
 	}
 
 	public Scene addConnectionScene(PersonProfile person) {
@@ -61,12 +64,13 @@ public class AddConnectionGUI {
 		Button btBack = new Button("Back");
 		pane.add(btAdd, 0, 6);
 		pane.add(btBack, 4, 6);
+		pane.add(new Label("current person: "+person.getName()), 3, 0);
 		ToggleGroup group = loadRelationType(person);
-		ListView<String> list = loadRelatedPerson(person);
+		ToggleGroup list = loadRelatedPerson(person);
 		btAdd.setOnAction(e -> {
 			if (group.getSelectedToggle() != null) {
 				String relation = (String) group.getSelectedToggle().getUserData();
-				PersonProfile relatedPerson = Menu.driver.findPersonByName(list.getSelectionModel().getSelectedItem());
+				PersonProfile relatedPerson = Menu.driver.findPersonByName((String) list.getSelectedToggle().getUserData());
 				if (Helper.isExistedRelation(person, relatedPerson)) {
 					Alert alert = new Alert(Alert.AlertType.WARNING);
 					alert.setTitle("MESSAGES");
@@ -102,19 +106,8 @@ public class AddConnectionGUI {
 			}
 		});
 
-		// try {
-		// person.addRelationship(relation, relatedPerson);
-		//// showMessageForAddRelation();
-		// }
-
-		// catch (AlreadyHaveRelationException e2) {
-		// e2.alreadyHaveRelationWarning();
-		// }
-
-		// addRelationAction(person, relation, selectPerson);
-
 		btBack.setOnAction(e -> {
-			Menu.window.setScene(new SelectPersonGUI().individualMainScene());
+			Menu.window.setScene(new SelectPersonGUI().viewPersonScene(person));
 		});
 		Scene scene = new Scene(pane, 800, 500);
 		return scene;

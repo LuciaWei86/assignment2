@@ -1,7 +1,6 @@
 package miniNET.Models.Connections;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import miniNET.Exceptions.NotToBeFriendsException;
 import miniNET.Exceptions.TooYoungException;
@@ -41,7 +40,7 @@ public class FriendConnection implements ConnectionManipulator {
 				friend.getConnections().put(RelationshipConstant.FRIENDSHIP, new ArrayList<PersonProfile>());
 			}
 			friend.getConnections().get(RelationshipConstant.FRIENDSHIP).add(person);
-			System.out.println(person.getConnections().keySet());
+			// System.out.println(person.getConnections().keySet());
 		}
 	}
 

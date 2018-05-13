@@ -67,7 +67,6 @@ public class AddPersonGUI {
 			File photoFile;
 			photoFile = uploadPhoto(personName.getText().trim(), personPhoto);
 			personPhoto.setText(photoFile.getAbsolutePath());
-			System.out.println(uploadPhoto(personName.getText().trim(), personPhoto));
 		});
 
 		btAdd.setOnAction(e -> {
@@ -135,7 +134,6 @@ public class AddPersonGUI {
 				"*.PNG", "*.JPG", "*JPEG");
 		fileChooser.getExtensionFilters().addAll(photoFilter);
 		File file = fileChooser.showOpenDialog(null);
-		System.out.println(file);
 		return file;
 	}
 
@@ -147,7 +145,6 @@ public class AddPersonGUI {
 			try {
 				BufferedImage bufferedImage = ImageIO.read(file);
 				File output = new File("src/miniNET/DataSeed/photoImage/" + name.trim() + "Photo." + fileType);
-				System.out.println(output.getPath());
 				ImageIO.write(bufferedImage, fileType, output);
 				return output.getName();
 			} catch (IOException e) {

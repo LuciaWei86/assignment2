@@ -59,7 +59,7 @@ public class SelectPersonGUI {
 		return scene;
 	}
 
-	private Scene viewPersonScene(PersonProfile person) {
+	public Scene viewPersonScene(PersonProfile person) {
 		GridPane pane = Menu.setUpPane();
 		Label label = new Label("Please choose one: ");
 		Button btDisplay = new Button("1.Display profile");
