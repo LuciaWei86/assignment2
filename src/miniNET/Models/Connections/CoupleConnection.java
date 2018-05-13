@@ -16,13 +16,13 @@ public class CoupleConnection implements ConnectionManipulator {
 	public CoupleConnection(PersonProfile person, PersonProfile partner) {
 		this.person = person;
 		this.partner = partner;
-		this.person.getConnections().put("couple", new ArrayList<PersonProfile>());
+		this.person.getConnections().put(RelationshipConstant.COUPLE, new ArrayList<PersonProfile>());
 	}
 
 	@Override
 	public void add() throws NoAvailableException, NotToBeCoupledException {
 		if (!(partner instanceof AdultProfile)) {
-			throw new NotToBeCoupledException(person, partner);
+			throw new NotToBeCoupledException();
 		} else if (this.partner.getConnections().containsKey(RelationshipConstant.COUPLE)) {
 			throw new NoAvailableException(partner, person);
 		} else {
@@ -37,18 +37,6 @@ public class CoupleConnection implements ConnectionManipulator {
 	@Override
 	public void remove() {
 		partner.getConnections().remove(RelationshipConstant.COUPLE);
-//
-//		if (person.getConnections().containsKey(RelationshipConstant.CHILD)) {
-//			for (PersonProfile child : person.getConnections().get(RelationshipConstant.CHILD)) {
-//				for (String relationType : child.getConnections().keySet()) {
-//					for (PersonProfile childRelation : child.getConnections().get(relationType))
-//						child.removeRelationship(relationType, childRelation);
-//				}
-//
-//			}
-//			partner.getConnections().remove(RelationshipConstant.CHILD);
-//		}
-
 	}
 
 }

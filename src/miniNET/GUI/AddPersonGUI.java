@@ -77,7 +77,6 @@ public class AddPersonGUI {
 			String gender = (String) group.getSelectedToggle().getUserData();
 			String age = personAge.getText().trim();
 			try {
-				addPerson(name, image, status, gender, age);
 				if(addPerson(name, image, status, gender, age)){
 					Alert alert = new Alert(Alert.AlertType.WARNING);
 					alert.setTitle("MESSAGES");
@@ -92,7 +91,6 @@ public class AddPersonGUI {
 			} catch (NoSuchAgeException exception) {
 				exception.noSuchAgeWarning();
 			} catch (NoDuplicatePersonException e2) {
-				System.out.println("1");
 				e2.noDuplicatePersonWarning();
 			}
 
@@ -128,7 +126,6 @@ public class AddPersonGUI {
 					return true;
 				}
 			}
-			
 		}
 	}
 

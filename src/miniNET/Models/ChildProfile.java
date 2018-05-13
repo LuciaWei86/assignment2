@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import miniNET.Constants.RelationshipConstant;
+import miniNET.Models.Connections.ClassmateConnection;
 import miniNET.Models.Connections.CoupleConnection;
 import miniNET.Models.Connections.FriendConnection;
 import miniNET.Models.Connections.ParentConnection;
@@ -70,6 +71,10 @@ public class ChildProfile extends PersonProfile {
 			if (parentA != null && parentB != null)
 				addParent(parentA, parentB);
 			break;
+		case RelationshipConstant.CLASSMATE:
+			this.setConnectionManipulator(new ClassmateConnection(this, relatedPerson));
+			this.connectionManipulator.add();
+			break;
 		default:
 			break;
 		}
@@ -89,6 +94,10 @@ public class ChildProfile extends PersonProfile {
 				this.setConnectionManipulator(new ParentConnection(parentA,parentB,this));
 				this.connectionManipulator.remove();
 			}
+			break;
+		case RelationshipConstant.CLASSMATE:
+			this.setConnectionManipulator(new ClassmateConnection(this, relatedPerson));
+			this.connectionManipulator.remove();
 			break;
 		default:
 			break;

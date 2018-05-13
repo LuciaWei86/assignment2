@@ -19,34 +19,36 @@ public class FriendConnection implements ConnectionManipulator {
 	public FriendConnection(PersonProfile person, PersonProfile friend) {
 		this.person = person;
 		this.friend = friend;
-		if (person.getConnections() == null) {
-			person.setConnections(new HashMap<String, ArrayList<PersonProfile>>());
+		if (!person.getConnections().containsKey(RelationshipConstant.FRIENDSHIP)) {
+			person.getConnections().put(RelationshipConstant.FRIENDSHIP, new ArrayList<PersonProfile>());
 		}
-		person.getConnections().put(RelationshipConstant.FRIENDSHIP, new ArrayList<PersonProfile>());
 	}
 
 	@Override
 	public void add() throws NotToBeFriendsException, TooYoungException {
-		person.getConnections().get(RelationshipConstant.FRIENDSHIP).add(friend);
-		if (!friend.getConnections().containsKey(RelationshipConstant.FRIENDSHIP)) {
-			friend.getConnections().put(RelationshipConstant.FRIENDSHIP, new ArrayList<PersonProfile>());
-		}
-		if (person instanceof AdultProfile && friend instanceof ChildProfile)
+		if (person instanceof AdultProfile && friend instanceof ChildProfile) {
 			throw new NotToBeFriendsException(person, friend);
-		else if (friend instanceof YoungChildProfile || person instanceof YoungChildProfile) {
+		} else if (friend instanceof AdultProfile && person instanceof ChildProfile) {
+			throw new NotToBeFriendsException(person, friend);
+		} else if (friend instanceof YoungChildProfile || person instanceof YoungChildProfile) {
 			throw new TooYoungException(person);
-		} else if(person instanceof ChildProfile && friend instanceof ChildProfile && !Helper.isAgeValid(person, friend)){
+		} else if (person instanceof ChildProfile && friend instanceof ChildProfile
+				&& !Helper.isAgeValid(person, friend)) {
 			throw new NotToBeFriendsException(person, friend);
-		}
-		else {
+		} else {
+			person.getConnections().get(RelationshipConstant.FRIENDSHIP).add(friend);
+			if (!friend.getConnections().containsKey(RelationshipConstant.FRIENDSHIP)) {
+				friend.getConnections().put(RelationshipConstant.FRIENDSHIP, new ArrayList<PersonProfile>());
+			}
 			friend.getConnections().get(RelationshipConstant.FRIENDSHIP).add(person);
+			System.out.println(person.getConnections().keySet());
 		}
 	}
 
 	@Override
 	public void remove() {
 		friend.getConnections().get(RelationshipConstant.FRIENDSHIP).remove(person);
-		if (friend.getConnections().get(RelationshipConstant.FRIENDSHIP).isEmpty()){
+		if (friend.getConnections().get(RelationshipConstant.FRIENDSHIP).isEmpty()) {
 			friend.getConnections().remove(RelationshipConstant.FRIENDSHIP);
 		}
 	}

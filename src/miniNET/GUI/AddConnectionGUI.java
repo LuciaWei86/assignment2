@@ -72,16 +72,27 @@ public class AddConnectionGUI {
 					alert.setTitle("MESSAGES");
 					alert.setContentText("The person is already related! Please try to connect anthoer person");
 					alert.show();
-				}
-
-				try {
-					person.addRelationship(relation, relatedPerson);
-				} catch (TooYoungException e1) {
-					e1.tooYoungException();
-				} catch (NotToBeFriendsException e1) {
-					e1.notToBeFriendsException();
-				} catch (Exception e1) {
-
+				} else {
+					try {
+						person.addRelationship(relation, relatedPerson);
+						Alert alert = new Alert(Alert.AlertType.WARNING);
+						alert.setTitle("MESSAGES");
+						alert.setContentText("Successfully! You've added a relation");
+						alert.show();
+					} catch (NoAvailableException e1) {
+						e1.noAvailableWarning();
+					} catch (NotToBeCoupledException e1) {
+						e1.notToBeCoupledException();
+					} catch (TooYoungException e1) {
+						e1.tooYoungException();
+					} catch (NotToBeFriendsException e1) {
+						e1.notToBeFriendsException();
+					} catch (NotToBeColleaguesException e1) {
+						e1.notToBeColleaguesException();
+					} catch (NotToBeClassmatesException e1) {
+						e1.notToBeClassmatesException();
+					} catch (Exception e1) {
+					}
 				}
 			} else {
 				Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -91,19 +102,12 @@ public class AddConnectionGUI {
 			}
 		});
 
-
 		// try {
 		// person.addRelationship(relation, relatedPerson);
 		//// showMessageForAddRelation();
-		// } catch (NoAvailableException e1) {
-		// e1.noAvailableWarning();
-		// } catch (NotToBeCoupledException e1) {
-		// e1.notToBeCoupleWarning();
-		// } catch (NotToBeColleaguesException e1) {
-		// e1.notToBeColleaguesWarning();
-		// } catch (NotToBeClassmatesException e1) {
-		// e1.notToBeClassmatesWarning();
-		// } catch (AlreadyHaveRelationException e2) {
+		// }
+
+		// catch (AlreadyHaveRelationException e2) {
 		// e2.alreadyHaveRelationWarning();
 		// }
 
