@@ -1,3 +1,7 @@
+/*
+ * Author: s3681944 Qi Jin
+ *  
+ *  */
 package miniNET.Models.Connections;
 
 import java.util.ArrayList;
