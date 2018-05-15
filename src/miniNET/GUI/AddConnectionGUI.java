@@ -9,7 +9,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -122,28 +124,25 @@ public class AddConnectionGUI {
 
 	public Scene addParent1ConnectionScene(PersonProfile currentPerson) {
 		GridPane pane = Menu.setUpPane();
-		Text text1 = new Text("The person is under 18 years old, must add parents");
+		Text text1 = new Text("The person is under 16 years old, must add parents");
 		text1.setFill(Color.RED);
 		pane.add(text1, 0, 0);
 		Button btNext = new Button("Next");
 		Button btBack = new Button("Back");
-		ComboBox<String> comboBox1 = new ComboBox<String>();
-		comboBox1.setValue("First Parent");
-
-		for (String name : Menu.driver.loadAdultStorage().keySet()) {
-			comboBox1.getItems().add(name);
-		}
+		VBox layout = new VBox(10);
+		ListView<String> personList = new ListView<>();
+		personList.getItems().addAll(Menu.driver.loadAdultStorage().keySet());
+		personList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		layout.setPadding(new Insets(10, 10, 10, 10));
+		layout.getChildren().addAll(personList);
+		pane.add(layout, 0, 1);
 		pane.add(btBack, 0, 4);
 		pane.add(btNext, 4, 4);
-		pane.add(comboBox1, 0, 1);
-		GridPane.setHalignment(comboBox1, HPos.CENTER);
 
 		btNext.setOnAction(e -> {
-
-			String parent1Name = comboBox1.getValue();
+			String parent1Name = personList.getSelectionModel().getSelectedItem();
 			PersonProfile parent1 = Menu.driver.findPersonByName(parent1Name);
 			Menu.window.setScene(addParent2ConnectionScene(currentPerson, parent1));
-
 		});
 
 		btBack.setOnAction(e -> {
@@ -180,7 +179,7 @@ public class AddConnectionGUI {
 				alert.setTitle("MESSAGES");
 				alert.setContentText(
 						"You must add a partner for " + parent1.getName() + " before choose him/her as parent" + "\n"
-								+ currentPerson.getName() + " will not be added to network!");
+								+"The child: "+ currentPerson.getName() + " will not be added to network!");
 				alert.showAndWait();
 				Menu.driver.deletePerson(currentPerson);
 			}

@@ -127,7 +127,7 @@ public class AddPersonGUI {
 					return true;
 				}else{
 					Menu.window.setScene(new AddConnectionGUI().addParent1ConnectionScene(currentPerson));
-					return true;
+					return false;
 				}
 			}
 		}
