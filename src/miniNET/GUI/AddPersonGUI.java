@@ -23,6 +23,7 @@ import miniNET.Exceptions.NoDuplicatePersonException;
 import miniNET.Exceptions.NoSuchAgeException;
 import miniNET.Exceptions.NotFillMandatoryCellException;
 import miniNET.Exceptions.NotIntergerException;
+import miniNET.Models.AdultProfile;
 import miniNET.Models.PersonProfile;
 
 public class AddPersonGUI {
@@ -81,7 +82,7 @@ public class AddPersonGUI {
 					alert.setTitle("MESSAGES");
 					alert.setContentText("Congratulations! Add person successfully!");
 					alert.showAndWait();
-					Menu.window.setScene(Menu.startScene());
+//					Menu.window.setScene(Menu.startScene());
 				}
 			} catch (NotFillMandatoryCellException e1) {
 				e1.notFillMandatoryCellWarning();
@@ -120,8 +121,12 @@ public class AddPersonGUI {
 				currentPerson = Menu.driver.addPerson(name, image, status, gender, personAge);
 				if (currentPerson == null)
 					throw new NoDuplicatePersonException();
-				else {
+				else if (currentPerson instanceof AdultProfile) {
 					currentPerson.setImage(savePhoto(name, image));
+					Menu.window.setScene(new AddConnectionGUI().addConnectionScene(currentPerson));
+					return true;
+				}else{
+					Menu.window.setScene(new AddConnectionGUI().addParent1ConnectionScene(currentPerson));
 					return true;
 				}
 			}

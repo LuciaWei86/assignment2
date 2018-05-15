@@ -20,8 +20,9 @@ public class ParentConnection implements ConnectionManipulator {
 		this.parent1 = parent1;
 		this.parent2 = parent2;
 		this.child = child;
-		this.child.getConnections().put(RelationshipConstant.PARENT, new ArrayList<PersonProfile>());
-
+		if (!child.getConnections().containsKey(RelationshipConstant.PARENT)) {
+			child.getConnections().put(RelationshipConstant.PARENT, new ArrayList<PersonProfile>());
+		}
 	}
 
 	@Override

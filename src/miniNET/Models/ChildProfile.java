@@ -61,11 +61,12 @@ public class ChildProfile extends PersonProfile {
 			this.connectionManipulator.add();
 			break;
 		case RelationshipConstant.PARENT:
-
 			if (parentA == null) {
 				parentA = (AdultProfile) relatedPerson;
-			} else if (parentB == null) {
+				System.out.println(parentA.getName());
+			} else {
 				parentB = (AdultProfile) relatedPerson;
+				System.out.println(parentB.getName());
 			}
 			if (parentA != null && parentB != null)
 				addParent(parentA, parentB);

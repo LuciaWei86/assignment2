@@ -173,6 +173,16 @@ public class Driver {
 		return personStorage;
 	}
 
+	public HashMap<String, PersonProfile> loadAdultStorage() {
+		HashMap<String, PersonProfile> adultStorage = new HashMap<String, PersonProfile>();;
+		for (PersonProfile p: personStorage.values()){
+			if(p instanceof AdultProfile){
+				adultStorage.put(p.getName(), p);
+			}
+		}
+		return adultStorage;
+	} 
+	
 	public PersonProfile findPersonByName(String name) {
 		return personStorage.get(name);
 	}
